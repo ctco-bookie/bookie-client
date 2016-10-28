@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
+  "main": "server.js",
   "devDependencies": {
-    "react-scripts": "0.7.0"
+    "express": "4.14.0",
+    "react-scripts": "0.4.1"
   },
   "dependencies": {
     "react": "15.3.2",
