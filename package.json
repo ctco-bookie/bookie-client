@@ -6,10 +6,8 @@
   "engines": {
     "node": "6.5.0"
   },
-  "devDependencies": {
-    "react-scripts": "0.4.1"
-  },
   "dependencies": {
+    "react-scripts": "0.4.1",
     "express": "4.14.0",
     "react": "15.3.2",
     "react-dom": "15.3.2"
@@ -19,6 +17,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "postinstall": "npm run build"
+    "heroku-postbuild": "npm run build"
   }
 }
