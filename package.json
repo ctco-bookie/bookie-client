@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
-  "main": "server.js",
+  "engines": {
+    "node": "6.5.0"
+  },
   "devDependencies": {
     "express": "4.14.0",
     "react-scripts": "0.4.1"
