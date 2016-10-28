@@ -1,3 +1,5 @@
+Travis CI: [![Build Status](https://api.travis-ci.org/ctco-dev/bookie-client.svg?branch=master)](https://travis-ci.org/ctco-dev/bookie-client)
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
