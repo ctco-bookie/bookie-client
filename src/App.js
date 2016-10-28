@@ -35,7 +35,7 @@ class App extends Component {
 
   renderSecret() {
     return (
-      <div>Bookie Server Secret is <b>{this.state.secret}</b></div>
+      <div>Bookie Server Super Secret is <b>{this.state.secret}</b></div>
     )
   }
 }
