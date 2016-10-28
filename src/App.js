@@ -14,7 +14,6 @@ class App extends Component {
   componentWillMount() {
     axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/secret`)
       .then(response => {
-        console.log(response);
         this.setState({
           secret: response.data
         })
