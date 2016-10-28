@@ -53,5 +53,5 @@ npm-debug.log
 
 # IntelliJ IDEA/WebStorm
 .idea/
-
+*.iml
 build/
