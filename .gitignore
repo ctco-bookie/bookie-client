@@ -48,6 +48,7 @@ build
 
 # misc
 .DS_Store
+.env
 npm-debug.log
 
 # IntelliJ IDEA/WebStorm
