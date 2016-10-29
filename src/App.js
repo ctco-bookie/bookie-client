@@ -11,15 +11,16 @@ class App extends Component {
   }
 
   componentWillMount() {
-    axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/secret`)
-      .then(response => {
-        this.setState({
-          secret: response.data
-        })
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    this.fetchSecret();
+  }
+
+  async fetchSecret() {
+    try {
+      const {data: secret} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/secret`);
+      this.setState({secret});
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
