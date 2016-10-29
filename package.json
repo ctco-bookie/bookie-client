@@ -4,13 +4,13 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "env-cmd": "2.2.0"
+    "env-cmd": "2.2.0",
+    "react-scripts": "0.4.3"
   },
   "dependencies": {
     "axios": "0.15.2",
     "react": "15.3.2",
-    "react-dom": "15.3.2",
-    "react-scripts": "0.4.3"
+    "react-dom": "15.3.2"
   },
   "scripts": {
     "start": "env-cmd .env react-scripts start",
