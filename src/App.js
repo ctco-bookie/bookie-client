@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import axios from 'axios';
+import React, {Component} from "react";
+import axios from "axios";
 
 class App extends Component {
   constructor() {
@@ -17,7 +17,7 @@ class App extends Component {
           secret: response.data
         })
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log(error);
       });
   }
@@ -26,7 +26,7 @@ class App extends Component {
     return (
       <div>
         {this.state.secret ? this.renderSecret()
-                           : <div>'Fetching Bookie Server Secret...'</div>}
+                           : <div>Fetching Bookie Server Super Secret...</div>}
       </div>
     );
   }
