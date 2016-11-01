@@ -6,7 +6,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <AppBar title="Bookie" showMenuIconButton={false} />
+        <AppBar title="Bookie" showMenuIconButton={false} titleStyle={{ textAlign: 'center' }} />
         {this.props.children}
       </div>
     );
