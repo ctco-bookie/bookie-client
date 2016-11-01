@@ -2,11 +2,19 @@ import React, {Component} from 'react';
 import axios from 'axios';
 
 class Room extends Component {
-  state = {
-    roomInfo: null
+  constructor() {
+    super();
+
+    this.state = {
+      roomInfo: null
+    };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
+    this.loadRoomInfo();
+  }
+
+  async loadRoomInfo() {
     const response =  await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendar/${this.props.params.email.toLowerCase()}`);
     this.setState({
       roomInfo: response.data
