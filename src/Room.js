@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import { Card, CardText } from 'material-ui/Card';
 
 class Room extends Component {
   constructor() {
@@ -27,18 +28,18 @@ class Room extends Component {
   }
 
   render() {
-    return <div>
+    return <Card style={{ margin: '10px' }}>
       {this.state.roomInfo ? this.renderRoomInfo()
         : <div>Loading room info</div>}
-    </div>;
+    </Card>;
   }
 
   renderRoomInfo() {
     return (
-      <section>
+      <CardText>
         <h2>Room {this.state.roomInfo.name}</h2>
         <div>Room is {this.state.roomInfo.busy ? 'Busy' : 'Available'}</div>
-      </section>
+      </CardText>
     )
   }
 }
