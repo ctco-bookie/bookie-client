@@ -8,7 +8,7 @@ import './index.css';
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <Route path="room/:email" component={Room}/>
+      <Route path="room/:number" component={Room}/>
     </Route>
   </Router>,
   document.getElementById('root')
