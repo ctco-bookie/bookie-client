@@ -55,7 +55,7 @@ class Room extends Component {
   renderRoomInfo(room) {
     return (
       <CardText>
-        <h2 style={{ marginTop: 0 }}>{room.name}</h2>
+        <h2 style={{ marginTop: 0 }}>{room.name} ({room.number})</h2>
         <div style={{ float: 'left', background: (room.busy) ? '#FF482C' : '#3ABF78', height: 16, width: 16, borderRadius: 8, marginRight: 8 }}></div>
         <div>{room.busy ? 'Busy' : 'Available for ' + room.availableFor}</div>
       </CardText>
