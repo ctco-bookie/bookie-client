@@ -62,7 +62,7 @@ class Room extends Component {
       <CardText>
         <h2 style={{ marginTop: 0 }}>Room {this.toCapitalCase(room.name)}</h2>
         <div style={{ float: 'left', background: (room.busy) ? '#FF482C' : '#3ABF78', height: 16, width: 16, borderRadius: 8, marginRight: 8 }}></div>
-        <div>Room is {room.busy ? 'Busy' : 'Available'}</div>
+        <div>{room.busy ? 'Busy' : 'Available for ' + room.availableFor}</div>
       </CardText>
     )
   }
