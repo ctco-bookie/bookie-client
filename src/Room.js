@@ -16,11 +16,11 @@ class Room extends Component {
   }
 
   async loadRoomInfo() {
-    const response =  await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendar/${this.props.params.email.toLowerCase()}`);
-    document.title = this.toCapitalCase(response.data.name);
-    this.setState({
-      roomInfo: response.data
-    })
+    const {data: roomInfo} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendar/${this.props.params.email.toLowerCase()}`);
+
+    document.title = this.toCapitalCase(roomInfo.name);
+
+    this.setState({roomInfo})
   }
 
   toCapitalCase(str) {
