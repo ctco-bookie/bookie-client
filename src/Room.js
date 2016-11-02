@@ -7,8 +7,9 @@ class Room extends Component {
     super();
 
     this.state = {
-      roomInfo: null
+      rooms: []
     };
+
   }
 
   componentWillMount() {
@@ -16,11 +17,15 @@ class Room extends Component {
   }
 
   async loadRoomInfo() {
-    const {data: roomInfo} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendar/${this.props.params.email.toLowerCase()}`);
+      const {data: rooms} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendars/${this.props.params.email.toLowerCase()}`);
 
-    document.title = this.toCapitalCase(roomInfo.name);
+      const masterRoom = this.findMaster(rooms);
+      document.title = masterRoom ? this.toCapitalCase(masterRoom.name) : 'Bookie';
+      this.setState({rooms})
+  }
 
-    this.setState({roomInfo})
+  findMaster(rooms) {
+      return rooms && rooms.filter(room => room.master)[0];
   }
 
   toCapitalCase(str) {
@@ -28,18 +33,36 @@ class Room extends Component {
   }
 
   render() {
-    return <Card style={{ margin: '10px' }}>
-      {this.state.roomInfo ? this.renderRoomInfo()
-        : <div>Loading room info</div>}
-    </Card>;
+      if (!this.state.rooms.length) {
+          return <div>Loading room info</div>
+      }
+
+      return (
+          <div>
+              <div>
+                  {this.state.rooms.filter(room => room.master).map(room => this.renderRoomCard(room))}
+              </div>
+              <div style={{ marginTop: '40px' }}>
+                  {this.state.rooms.filter(room => !room.master).map(room => this.renderRoomCard(room))}
+              </div>
+          </div>
+      )
   }
 
-  renderRoomInfo() {
+  renderRoomCard(room) {
+      return (
+          <Card style={{margin: '10px'}} key={room.number}>
+              {this.renderRoomInfo(room)}
+          </Card>
+      );
+  }
+
+  renderRoomInfo(room) {
     return (
       <CardText>
-        <h2 style={{ marginTop: 0 }}>Room {this.toCapitalCase(this.state.roomInfo.name)}</h2>
-        <div style={{ float: 'left', background: (this.state.roomInfo.busy) ? '#FF482C' : '#3ABF78', height: 16, width: 16, borderRadius: 8, marginRight: 8 }}></div>
-        <div>Room is {this.state.roomInfo.busy ? 'Busy' : 'Available'}</div>
+        <h2 style={{ marginTop: 0 }}>Room {this.toCapitalCase(room.name)}</h2>
+        <div style={{ float: 'left', background: (room.busy) ? '#FF482C' : '#3ABF78', height: 16, width: 16, borderRadius: 8, marginRight: 8 }}></div>
+        <div>Room is {room.busy ? 'Busy' : 'Available'}</div>
       </CardText>
     )
   }
