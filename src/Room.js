@@ -17,7 +17,7 @@ class Room extends Component {
   }
 
   async loadRoomInfo() {
-      const {data: rooms} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendars/${this.props.params.email.toLowerCase()}`);
+      const {data: rooms} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendars/${this.props.params.number}`);
 
       const masterRoom = this.findMaster(rooms);
       document.title = masterRoom ? this.toCapitalCase(masterRoom.name) : 'Bookie';
