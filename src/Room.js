@@ -19,17 +19,12 @@ class Room extends Component {
   async loadRoomInfo() {
       const {data: rooms} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendars/${this.props.params.number}`);
 
-      const masterRoom = this.findMaster(rooms);
-      document.title = masterRoom ? this.toCapitalCase(masterRoom.name) : 'Bookie';
+      document.title = this.findMaster(rooms).name;
       this.setState({rooms})
   }
 
   findMaster(rooms) {
-      return rooms && rooms.filter(room => room.master)[0];
-  }
-
-  toCapitalCase(str) {
-    return str.replace(/\w\S*/g, (txt) => {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      return rooms && rooms.find(room => room.master);
   }
 
   render() {
@@ -60,7 +55,7 @@ class Room extends Component {
   renderRoomInfo(room) {
     return (
       <CardText>
-        <h2 style={{ marginTop: 0 }}>Room {this.toCapitalCase(room.name)}</h2>
+        <h2 style={{ marginTop: 0 }}>{room.name} {room.number}</h2>
         <div style={{ float: 'left', background: (room.busy) ? '#FF482C' : '#3ABF78', height: 16, width: 16, borderRadius: 8, marginRight: 8 }}></div>
         <div>{room.busy ? 'Busy' : 'Available for ' + room.availableFor}</div>
       </CardText>
