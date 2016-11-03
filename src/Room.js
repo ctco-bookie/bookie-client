@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {Card, CardText} from 'material-ui/Card';
+import {List, ListItem} from 'material-ui/List';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -19,20 +20,28 @@ class Room extends Component {
       </div>
     }
 
-    const {data: {roomAvailabilityWithFloorOptions: rooms}} = this.props;
+    const {data: {floorMasterRoom}} = this.props;
+    const {data: {floorRoomOptions}} = this.props;
 
-    document.title = rooms.filter(room => room.master)[0].name;
+    floorMasterRoom.master = true;
+
+    document.title = floorMasterRoom.name;
 
     return (
       <div>
-        <div>
-          {rooms.filter(room => room.master).map(room => this.renderRoomCard(room))}
+        <div style={{padding: '4px 16px 0 16px'}}>
+          {this.renderRoomCard(floorMasterRoom)}
         </div>
-        <div
-          style={{marginTop: '40px'}}
-        >
-          {rooms.filter(room => !room.master).map(room => this.renderRoomCard(room))}
-        </div>
+
+        <List>
+          <p className="list-title">Available rooms on this floor</p>
+
+          {floorRoomOptions.map(room =>
+            <ListItem key={room.number}>
+              {this.renderRoomCard(room)}
+            </ListItem>
+          )}
+        </List>
       </div>
     );
   }
@@ -40,13 +49,13 @@ class Room extends Component {
   renderRoomCard(room) {
     return (
       <Card key={room.number} className={'room-card'}
-            style={room.master ? { background: (room.busy) ? '#FF482C' : '#3ABF78' } : {}}
+            style={room.master ? { background: (room.availability.busy) ? '#FF482C' : '#3ABF78' } : {}}
       >
         <CardText>
-          <div className={'room ' + (room.master ? 'room-master' : '') + (!room.busy && room.master ? ' room-master-available' : '')}>
+          <div className={'room ' + (room.master ? 'room-master' : '') + (!room.availability.busy && room.master ? ' room-master-available' : '')}>
             <h2 className="title">{room.name} ({room.number})</h2>
-            <div className={'indicator ' + (room.busy ? 'busy' : 'available')}></div>
-            <p>{room.busy ? 'Busy till ' + room.availableFrom : 'Available for ' + room.availableFor}</p>
+            <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
+            <p className="availability">{room.availability.busy ? 'busy till ' + room.availability.availableFrom : 'available ' + room.availability.availableFor}</p>
           </div>
         </CardText>
       </Card>
@@ -56,7 +65,8 @@ class Room extends Component {
 
 Room.propTypes = {
   data: PropTypes.shape({
-    roomAvailabilityWithFloorOptions: PropTypes.arrayOf(PropTypes.object),
+    floorMasterRoom: PropTypes.object,
+    floorRoomOptions: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired,
   }).isRequired,
   params: PropTypes.shape({
@@ -65,18 +75,30 @@ Room.propTypes = {
 };
 
 const AvailableRoomsQuery = gql`
-  query AvailableRoomsQuery($roomId: Int!){
-    roomAvailabilityWithFloorOptions(roomId: $roomId) {
-      name
-      number
-      busy
-      availableFor
-      availableFrom
-      master
-  }
+  query AvailableRoomsQuery($roomNumber: Int!){
+      floorMasterRoom: room(roomNumber: $roomNumber) {
+        name
+        number
+        capacity
+        availability {
+          busy
+          availableFor
+          availableFrom
+        }
+      }
+      floorRoomOptions: rooms(floorMasterRoomNumber: $roomNumber, busy:false) {
+        name
+        number
+        capacity
+        availability {
+          busy
+          availableFor
+          availableFrom
+        }
+      }
 }
 `;
 
 export default graphql(AvailableRoomsQuery, {
-  options: ({params}) => ({variables: {roomId: params.roomNumber}}),
+  options: ({params}) => ({variables: {roomNumber: params.roomNumber}}),
 })(Room);
