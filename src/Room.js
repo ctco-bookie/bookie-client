@@ -15,7 +15,7 @@ class Room extends Component {
         marginTop: '30px'
       }}>
         <CircularProgress size={80} thickness={5} />
-        <p>Loading room availability</p>
+        <p>Checking room availability</p>
       </div>
     }
 
