@@ -20,6 +20,11 @@
   margin-right: 8px;
 }
 
+.list-title {
+  padding: 10px 0 0 28px;
+  margin: 0
+}
+
 .available {
   background: #3ABF78;
 }

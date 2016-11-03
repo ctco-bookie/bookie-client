@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {Card, CardText} from 'material-ui/Card';
+import {List, ListItem} from 'material-ui/List';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -28,11 +29,18 @@ class Room extends Component {
         <div>
           {rooms.filter(room => room.master).map(room => this.renderRoomCard(room))}
         </div>
-        <div
-          style={{marginTop: '40px'}}
-        >
-          {rooms.filter(room => !room.master).map(room => this.renderRoomCard(room))}
-        </div>
+
+
+
+        <List style={{padding: 0}}>
+            <p className="list-title">Available rooms on this floor</p>
+
+            {rooms.filter(room => !room.master).map(room =>
+                <ListItem key={room.number} style={{padding: 0}}>
+                  {this.renderRoomCard(room)}
+                </ListItem>
+            )}
+        </List>
       </div>
     );
   }
@@ -40,7 +48,7 @@ class Room extends Component {
   renderRoomCard(room) {
     return (
       <Card key={room.number} className={'room-card'}
-            style={room.master ? { background: (room.busy) ? '#FF482C' : '#3ABF78' } : {}}
+            style={room.master ? { background: (room.busy) ? '#FF482C' : '#3ABF78' } : {padding: 0}}
       >
         <CardText>
           <div className={'room ' + (room.master ? 'room-master' : '') + (!room.busy && room.master ? ' room-master-available' : '')}>
