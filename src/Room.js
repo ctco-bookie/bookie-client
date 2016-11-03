@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import {Card, CardText} from 'material-ui/Card';
+import {Card, CardText, CardActions} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -49,6 +50,9 @@ class Room extends Component {
             <p>{room.busy ? 'Busy till ' + room.availableFrom : 'Available for ' + room.availableFor}</p>
           </div>
         </CardText>
+        <CardActions>
+          <FlatButton label={ 'Book ' + room.name } href={`${room.number}/book`} />
+        </CardActions>
       </Card>
     );
   }
