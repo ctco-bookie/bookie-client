@@ -79,27 +79,24 @@ Room.propTypes = {
 
 const AvailableRoomsQuery = gql`
   query AvailableRoomsQuery($roomNumber: Int!){
-      floorMasterRoom: room(roomNumber: $roomNumber) {
-        name
-        number
-        capacity
-        availability {
-          busy
-          availableFor
-          availableFrom
-        }
-      }
-      roomsOnMasterFloor: rooms(floorMasterRoomNumber: $roomNumber) {
-        name
-        number
-        capacity
-        availability {
-          busy
-          availableFor
-          availableFrom
-        }
-      }
-}
+    floorMasterRoom: room(roomNumber: $roomNumber) {
+      ...roomWithAvailability
+    }
+    roomsOnMasterFloor: rooms(floorMasterRoomNumber: $roomNumber) {
+      ...roomWithAvailability
+    }
+  }
+  
+  fragment roomWithAvailability on Room {
+    name
+    number
+    capacity
+    availability {
+      busy
+      availableFor
+      availableFrom
+    }
+  }
 `;
 
 export default graphql(AvailableRoomsQuery, {
