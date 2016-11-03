@@ -11,7 +11,7 @@ class Room extends Component {
 
     const {data: {roomAvailabilityWithFloorOptions: rooms}} = this.props;
 
-    document.title = rooms.find(room => room.master).name;
+    document.title = rooms.filter(room => room.master)[0].name;
 
     return (
       <div>
