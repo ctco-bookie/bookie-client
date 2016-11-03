@@ -6,7 +6,11 @@ import gql from 'graphql-tag';
 class Room extends Component {
   render() {
     if (this.props.data.loading) {
-      return <div>Fetching room availability...</div>
+      return <div style={{
+          textAlign: 'center',
+          fontSize: '20',
+          marginTop: '30px'
+      }}>Fetching room availability...</div>
     }
 
     const {data: {roomAvailabilityWithFloorOptions: rooms}} = this.props;
