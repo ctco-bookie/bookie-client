@@ -56,7 +56,7 @@ class Room extends Component {
           }}
         >
         </div>
-        <div>{room.busy ? 'Busy' : 'Available for ' + room.availableFor}</div>
+        <div>{room.busy ? 'Busy till ' + room.availableFrom : 'Available for ' + room.availableFor}</div>
       </CardText>
     )
   }
@@ -79,6 +79,7 @@ const AvailableRoomsQuery = gql`
       number
       busy
       availableFor
+      availableFrom
       master
   }
 }
