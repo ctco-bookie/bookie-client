@@ -4,6 +4,7 @@ import {Router, Route, browserHistory} from 'react-router';
 import App from './App';
 import Room from './Room';
 import Book from './Book';
+import Check from './Check';
 import './index.css';
 import ApolloClient, {createNetworkInterface} from 'apollo-client';
 import {ApolloProvider} from 'react-apollo';
@@ -16,8 +17,10 @@ ReactDOM.render(
   <ApolloProvider client={client}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
-        <Route path="room/:roomNumber" component={Room}/>
-        <Route path="room/:roomNumber/book" component={Book}/>
+        <Route path="room/:roomNumber/" component={Room}>
+          <Route path="check" component={Check} />
+          <Route path="book" component={Book} />
+        </Route>
       </Route>
     </Router>
   </ApolloProvider>,
