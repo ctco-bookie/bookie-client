@@ -8,7 +8,7 @@ class Room extends Component {
     if (this.props.data.loading) {
       return <div style={{
           textAlign: 'center',
-          fontSize: '20',
+          fontSize: 20,
           marginTop: '30px'
       }}>Fetching room availability...</div>
     }
