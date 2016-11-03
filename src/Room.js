@@ -21,7 +21,10 @@ class Room extends Component {
     }
 
     const {data: {floorMasterRoom}} = this.props;
-    const {data: {floorRoomOptions}} = this.props;
+    const {data: {roomsOnMasterFloor}} = this.props;
+
+    const availableRooms = roomsOnMasterFloor.filter(room => !room.busy)
+                                           .sort((a, b) => a.number - b.number);
 
     floorMasterRoom.master = true;
 
@@ -36,7 +39,7 @@ class Room extends Component {
         <List>
           <p className="list-title">Available rooms on this floor</p>
 
-          {floorRoomOptions.map(room =>
+          {availableRooms.map(room =>
             <ListItem key={room.number}>
               {this.renderRoomCard(room)}
             </ListItem>
@@ -66,7 +69,7 @@ class Room extends Component {
 Room.propTypes = {
   data: PropTypes.shape({
     floorMasterRoom: PropTypes.object,
-    floorRoomOptions: PropTypes.arrayOf(PropTypes.object),
+    roomsOnMasterFloor: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired,
   }).isRequired,
   params: PropTypes.shape({
@@ -86,7 +89,7 @@ const AvailableRoomsQuery = gql`
           availableFrom
         }
       }
-      floorRoomOptions: rooms(floorMasterRoomNumber: $roomNumber, busy:false) {
+      roomsOnMasterFloor: rooms(floorMasterRoomNumber: $roomNumber) {
         name
         number
         capacity
