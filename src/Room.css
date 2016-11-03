@@ -1,0 +1,47 @@
+.room-card {
+  margin: 10px;
+}
+
+.room {
+  margin: 5px;
+}
+
+.room .title {
+  margin-top: 0;
+  margin-bottom: 0.4em;
+  font-weight: normal;
+}
+
+.room .indicator {
+  float: left;
+  height: 16px;
+  width: 16px;
+  border-radius: 8px;
+  margin-right: 8px;
+}
+
+.available {
+  background: #3ABF78;
+}
+
+.busy {
+  background: #FF482C;
+}
+
+.room p {
+  margin: 0;
+}
+
+.room-master {
+  color: #fff;
+  font-size: 1.6em;
+}
+
+.room-master .indicator {
+  display: none;
+}
+
+.room-master-available {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
