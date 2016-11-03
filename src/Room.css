@@ -9,7 +9,12 @@
 .room .title {
   margin-top: 0;
   margin-bottom: 0.4em;
+  font-size: 1.25em;
   font-weight: normal;
+}
+
+.room .availability {
+  opacity: 0.54;
 }
 
 .room .indicator {
@@ -21,6 +26,7 @@
 }
 
 .list-title {
+  opacity: 0.54;
   padding: 10px 0 0 28px;
   margin: 0
 }
@@ -43,6 +49,14 @@
 
 .room-master .indicator {
   display: none;
+}
+
+.room-master .title {
+  font-size: 1.4em;
+}
+
+.room-master .availability {
+  opacity: 1;
 }
 
 .room-master-available {

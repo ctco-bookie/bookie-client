@@ -26,17 +26,15 @@ class Room extends Component {
 
     return (
       <div>
-        <div>
+        <div style={{padding: '4px 16px 0 16px'}}>
           {rooms.filter(room => room.master).map(room => this.renderRoomCard(room))}
         </div>
 
-
-
-        <List style={{padding: 0}}>
+        <List>
             <p className="list-title">Available rooms on this floor</p>
 
             {rooms.filter(room => !room.master).map(room =>
-                <ListItem key={room.number} style={{padding: 0}}>
+                <ListItem key={room.number}>
                   {this.renderRoomCard(room)}
                 </ListItem>
             )}
@@ -48,13 +46,13 @@ class Room extends Component {
   renderRoomCard(room) {
     return (
       <Card key={room.number} className={'room-card'}
-            style={room.master ? { background: (room.busy) ? '#FF482C' : '#3ABF78' } : {padding: 0}}
+            style={room.master ? { background: (room.busy) ? '#FF482C' : '#3ABF78' } : {}}
       >
         <CardText>
           <div className={'room ' + (room.master ? 'room-master' : '') + (!room.busy && room.master ? ' room-master-available' : '')}>
             <h2 className="title">{room.name} ({room.number})</h2>
             <div className={'indicator ' + (room.busy ? 'busy' : 'available')}></div>
-            <p>{room.busy ? 'Busy till ' + room.availableFrom : 'Available for ' + room.availableFor}</p>
+            <p className="availability">{room.busy ? 'busy till ' + room.availableFrom : 'available ' + room.availableFor}</p>
           </div>
         </CardText>
       </Card>
