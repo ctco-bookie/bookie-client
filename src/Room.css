@@ -34,7 +34,6 @@
 
 .room-master {
   color: #fff;
-  font-size: 1.6em;
 }
 
 .room-master .indicator {
@@ -42,6 +41,7 @@
 }
 
 .room-master-available {
+  font-size: 1.6em;
   padding-top: 30px;
   padding-bottom: 30px;
 }
