@@ -24,7 +24,7 @@ class Room extends Component {
     const {data: {roomsOnMasterFloor}} = this.props;
 
     const availableRooms = roomsOnMasterFloor.filter(room => !room.busy)
-                                           .sort((a, b) => a.number - b.number);
+                                             .sort((a, b) => a.number - b.number);
 
     floorMasterRoom.master = true;
 
