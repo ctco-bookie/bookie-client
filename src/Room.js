@@ -2,15 +2,21 @@ import React, {Component, PropTypes} from 'react';
 import {Card, CardText} from 'material-ui/Card';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
+import CircularProgress from 'material-ui/CircularProgress';
+
+import './Room.css';
 
 class Room extends Component {
   render() {
     if (this.props.data.loading) {
       return <div style={{
-          textAlign: 'center',
-          fontSize: '20',
-          marginTop: '30px'
-      }}>Fetching room availability...</div>
+        textAlign: 'center',
+        fontSize: '20px',
+        marginTop: '30px'
+      }}>
+        <CircularProgress size={80} thickness={5} />
+        <p>Loading room availability</p>
+      </div>
     }
 
     const {data: {roomAvailabilityWithFloorOptions: rooms}} = this.props;
@@ -33,32 +39,18 @@ class Room extends Component {
 
   renderRoomCard(room) {
     return (
-      <Card style={{margin: '10px'}} key={room.number}>
-        {this.renderRoomInfo(room)}
+      <Card key={room.number} className={'room-card'}
+            style={room.master ? { background: (room.busy) ? '#FF482C' : '#3ABF78' } : {}}
+      >
+        <CardText>
+          <div className={'room ' + (room.master ? 'room-master' : '') + (!room.busy && room.master ? ' room-master-available' : '')}>
+            <h2 className="title">{room.name} ({room.number})</h2>
+            <div className={'indicator ' + (room.busy ? 'busy' : 'available')}></div>
+            <p>{room.busy ? 'Busy till ' + room.availableFrom : 'Available for ' + room.availableFor}</p>
+          </div>
+        </CardText>
       </Card>
     );
-  }
-
-  renderRoomInfo(room) {
-    return (
-      <CardText>
-        <h2
-          style={{marginTop: 0}}
-        >
-          {room.name} {room.number}</h2>
-        <div
-          style={{
-            float: 'left', background: (room.busy) ? '#FF482C' : '#3ABF78',
-            height: 16,
-            width: 16,
-            borderRadius: 8,
-            marginRight: 8
-          }}
-        >
-        </div>
-        <div>{room.busy ? 'Busy till ' + room.availableFrom : 'Available for ' + room.availableFor}</div>
-      </CardText>
-    )
   }
 }
 
