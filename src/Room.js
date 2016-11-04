@@ -30,7 +30,7 @@ class Room extends Component {
       <div>
         {this.props.children && React.cloneElement(this.props.children, {
           rooms: availableRooms,
-          floorMasterRoom
+          masterRoom: floorMasterRoom
         })}
       </div>
     );

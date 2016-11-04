@@ -24,7 +24,7 @@ class Book extends Component {
       </div>
     }
 
-    const {data: {roomAvailability: room}} = this.props;
+    const {data: {room}} = this.props;
 
     if (!this.state.result) {
       return this.renderForm(room);
@@ -75,8 +75,8 @@ Book.propTypes = {
 };
 
 const RoomQuery = gql`
-  query RoomQuery($roomId: Int!){
-    roomAvailability(roomId: $roomId) {
+  query RoomQuery($roomNumber: Int!){
+    room(roomNumber: $roomNumber) {
       name
       number
   }
@@ -84,8 +84,8 @@ const RoomQuery = gql`
 `;
 
 const BookMutation = gql`
-  mutation BookMutation($roomId: Int!){
-    bookRoom(roomId: $roomId) {
+  mutation BookMutation($roomNumber: Int!){
+    bookRoom(roomNumber: $roomNumber) {
       success
       message
     }
@@ -93,12 +93,12 @@ const BookMutation = gql`
 `;
 
 const withQueries = graphql(RoomQuery, {
-  options: ({params}) => ({variables: {roomId: params.roomNumber}}),
+  options: ({params}) => ({variables: {roomNumber: params.roomNumber}}),
 });
 
 const withMutations = graphql(BookMutation, {
   props: ({mutate}) => ({
-    bookRoom: ({params}) => mutate({variables: {roomId: params.roomNumber}})
+    bookRoom: ({params}) => mutate({variables: {roomNumber: params.roomNumber}})
   })
 });
 

@@ -6,17 +6,17 @@ import './Check.css';
 
 class Check extends Component {
   render() {
-    const {rooms} = this.props;
+    const {rooms, masterRoom} = this.props;
 
     return (
       <div>
         <div>
-          {rooms.filter(room => room.master).map(room => this.renderRoomCard(room))}
+          {this.renderRoomCard(masterRoom)}
         </div>
         <div
           style={{marginTop: '40px'}}
         >
-          {rooms.filter(room => !room.master).map(room => this.renderRoomCard(room))}
+          {rooms.map(room => this.renderRoomCard(room))}
         </div>
       </div>
     );
@@ -25,13 +25,13 @@ class Check extends Component {
   renderRoomCard(room) {
     return (
       <Card key={room.number} className={'room-card'}
-            style={room.master ? { background: (room.busy) ? '#FF482C' : '#3ABF78' } : {}}
+            style={room.master ? { background: (room.availability.busy) ? '#FF482C' : '#3ABF78' } : {}}
       >
         <CardText>
-          <div className={'room ' + (room.master ? 'room-master' : '') + (!room.busy && room.master ? ' room-master-available' : '')}>
+          <div className={'room ' + (room.master ? 'room-master' : '') + (!room.availability.busy && room.master ? ' room-master-available' : '')}>
             <h2 className="title">{room.name} ({room.number})</h2>
-            <div className={'indicator ' + (room.busy ? 'busy' : 'available')}></div>
-            <p>{room.busy ? 'Busy till ' + room.availableFrom : 'Available for ' + room.availableFor}</p>
+            <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
+            <p>{room.availability.busy ? 'Busy till ' + room.availability.availableFrom : 'Available for ' + room.availability.availableFor}</p>
           </div>
         </CardText>
         <CardActions>
