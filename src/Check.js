@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import {Card, CardText, CardActions} from 'material-ui/Card';
-import {Link} from 'react-router';
-import capacityIcon from './svg/capacity.svg';
-import capacityIconMaster from './svg/capacityMaster.svg';
 import FlatButton from 'material-ui/FlatButton';
 import { browserHistory } from 'react-router'
 
@@ -17,9 +14,8 @@ class Check extends Component {
         <div>
           {this.renderRoomCard(masterRoom)}
         </div>
-        <div
-          style={{marginTop: '40px'}}
-        >
+        <div>
+          <p className="list-title">Available rooms on this floor</p>
           {rooms.map(room => this.renderRoomCard(room))}
         </div>
       </div>
@@ -34,13 +30,7 @@ class Check extends Component {
         <CardText>
           <div className={'room ' + (room.master ? 'room-master' : '') + (!room.availability.busy && room.master ? ' room-master-available' : '')}>
             <h2 className="title">{room.name} ({room.number})</h2>
-            <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
-            <p>{room.availability.busy ? 'Busy till ' + room.availability.availableFrom : 'Available for ' + room.availability.availableFor}</p>
-            <img
-              className="icon"
-              src={room.master ? capacityIconMaster : capacityIcon}
-              alt="capacityIcon"
-            />
+            { !room.availability.busy ? this.renderRoomInfo(room) :  <div>{this.renderTimeStatus(room)}</div>}
           </div>
         </CardText>
         {!room.availability.busy ? this.renderCardActions(room) : ''}
@@ -67,6 +57,30 @@ class Check extends Component {
     return <CardActions style={actionStyles}>
       <FlatButton label={'Book ' + room.name} onClick={() => this.book(room.number)} primary={true} labelStyle={labelStyles} />
     </CardActions>
+  }
+
+  renderRoomInfo(room) {
+    return (
+      <div>
+        <div className="info" >
+          <div className={'info-icon ' + (room.master ? 'info-icon-master info-icon-capacity-master' : 'info-icon-capacity')}></div>
+          <div>{room.capacity}</div>
+        </div>
+        <div className="info">
+          <div className={'info-icon ' + (room.master ? 'info-icon-master info-icon-time-master' : '')}>
+          {(!room.master
+            ? <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
+            : <div className={'info-icon info-icon-time ' + (room.master ? 'info-icon-master' : '')}></div>
+          )}
+          </div>
+          <div>{this.renderTimeStatus(room)}</div>
+        </div>
+      </div>
+    );
+  }
+
+  renderTimeStatus(room) {
+    return room.availability.busy ? 'Busy till ' + room.availability.availableFrom : 'available for ' + room.availability.availableFor;
   }
 
   book(roomId) {
