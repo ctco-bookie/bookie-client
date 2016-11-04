@@ -24,6 +24,14 @@ class Book extends Component {
   render() {
     const {data: {room}} = this.props;
 
+    return (
+      <div style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, background: '#fff'}}>
+        {this.renderContents(room)}
+      </div>
+    );
+  }
+
+  renderContents(room) {
     if (!this.state.result) {
       return this.renderForm(room);
     } else if (this.state.result.success) {
@@ -35,34 +43,32 @@ class Book extends Component {
 
   renderForm(room) {
     return (
-      <div style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}>
-        <Card style={{height: '100%'}}>
-          <CardTitle title={`Book + ${room.name} (${room.number}) for`}></CardTitle>
-          <CardText>
-            <RadioButtonGroup
-              onChange={this.handleOptionChange}
-              name="bookingOptions"
-              defaultSelected={this.state.selectedOption}>
-              {bookingOptions.map(option => {
-                return (
-                  <RadioButton
-                    key={option.duration}
-                    value={option}
-                    label={option.label}
-                    style={{marginBottom: '20px', fontSize: '16px'}}
-                  />
-                );
-              })}
-            </RadioButtonGroup>
-            <RaisedButton style={{marginTop: '20px'}}
-              label="Book Now"
-              primary={true}
-              fullWidth={true}
-              onClick={this.book}
-            />
-          </CardText>
-        </Card>
-      </div>
+      <Card style={{height: '100%'}}>
+        <CardTitle title={`Book + ${room.name} (${room.number}) for`}></CardTitle>
+        <CardText>
+          <RadioButtonGroup
+            onChange={this.handleOptionChange}
+            name="bookingOptions"
+            defaultSelected={this.state.selectedOption}>
+            {bookingOptions.map(option => {
+              return (
+                <RadioButton
+                  key={option.duration}
+                  value={option}
+                  label={option.label}
+                  style={{marginBottom: '20px', fontSize: '16px'}}
+                />
+              );
+            })}
+          </RadioButtonGroup>
+          <RaisedButton style={{marginTop: '20px'}}
+            label="Book Now"
+            primary={true}
+            fullWidth={true}
+            onClick={this.book}
+          />
+        </CardText>
+      </Card>
     );
   }
 
