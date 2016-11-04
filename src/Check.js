@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Card, CardText, CardActions} from 'material-ui/Card';
-import {Link} from 'react-router';
 import capacityIcon from './svg/capacity.svg';
 import capacityIconMaster from './svg/capacityMaster.svg';
 import FlatButton from 'material-ui/FlatButton';
