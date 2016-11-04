@@ -1,0 +1,73 @@
+.progress-bar {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 100px;
+}
+
+.room-card {
+  margin: 10px;
+}
+
+.room {
+  margin: 5px;
+}
+
+.room .title {
+  margin-top: 0;
+  margin-bottom: 0.4em;
+  font-size: 1.25em;
+  font-weight: normal;
+}
+
+.room .availability {
+  opacity: 0.54;
+}
+
+.room .indicator {
+  margin-top: 3px;
+  float: left;
+  height: 12px;
+  width: 12px;
+  border-radius: 6px;
+  margin-right: 6px;
+}
+
+.list-title {
+  opacity: 0.54;
+  padding: 20px 0 0 12px;
+  margin: 0
+}
+
+.available {
+  background: #3ABF78;
+}
+
+.busy {
+  background: #FF482C;
+}
+
+.room p {
+  margin: 0;
+}
+
+.room-master {
+  color: #fff;
+}
+
+.room-master .indicator {
+  display: none;
+}
+
+.room-master .title {
+  font-size: 1.4em;
+}
+
+.room-master .availability {
+  opacity: 1;
+}
+
+.room-master-available {
+  font-size: 1.6em;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}

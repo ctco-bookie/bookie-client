@@ -1,71 +1,94 @@
-import React, {Component} from 'react';
-import axios from 'axios';
-import { Card, CardText } from 'material-ui/Card';
+import React, {Component, PropTypes} from 'react';
+import {Card, CardText} from 'material-ui/Card';
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
+import CircularProgress from 'material-ui/CircularProgress';
+
+import './Room.css';
 
 class Room extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      rooms: []
-    };
-
-  }
-
-  componentWillMount() {
-    this.loadRoomInfo();
-  }
-
-  async loadRoomInfo() {
-      const {data: rooms} = await axios.get(`${process.env.REACT_APP_BOOKIE_SERVER_URL}/calendars/${this.props.params.number}`);
-
-      const masterRoom = this.findMaster(rooms);
-      document.title = masterRoom ? this.toCapitalCase(masterRoom.name) : 'Bookie';
-      this.setState({rooms})
-  }
-
-  findMaster(rooms) {
-      return rooms && rooms.filter(room => room.master)[0];
-  }
-
-  toCapitalCase(str) {
-    return str.replace(/\w\S*/g, (txt) => {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-  }
-
   render() {
-      if (!this.state.rooms.length) {
-          return <div>Loading room info</div>
-      }
+    if (this.props.data.loading) {
+      return <div className="progress-bar">
+        <CircularProgress size={80} thickness={5} />
+        <p>Checking room availability</p>
+      </div>
+    }
 
-      return (
-          <div>
-              <div>
-                  {this.state.rooms.filter(room => room.master).map(room => this.renderRoomCard(room))}
-              </div>
-              <div style={{ marginTop: '40px' }}>
-                  {this.state.rooms.filter(room => !room.master).map(room => this.renderRoomCard(room))}
-              </div>
-          </div>
-      )
+    const {data: {floorMasterRoom}} = this.props;
+    const {data: {roomsOnMasterFloor}} = this.props;
+
+    const availableRooms = roomsOnMasterFloor.filter(room => !room.busy)
+                                             .sort((a, b) => a.number - b.number);
+
+    floorMasterRoom.master = true;
+
+    document.title = floorMasterRoom.name;
+
+    return (
+      <div>
+        <div>
+          {this.renderRoomCard(floorMasterRoom)}
+        </div>
+
+        <div>
+          <p className="list-title">Available rooms on this floor</p>
+          {availableRooms.map(room => this.renderRoomCard(room))}
+        </div>
+      </div>
+    );
   }
 
   renderRoomCard(room) {
-      return (
-          <Card style={{margin: '10px'}} key={room.number}>
-              {this.renderRoomInfo(room)}
-          </Card>
-      );
-  }
-
-  renderRoomInfo(room) {
     return (
-      <CardText>
-        <h2 style={{ marginTop: 0 }}>Room {this.toCapitalCase(room.name)}</h2>
-        <div style={{ float: 'left', background: (room.busy) ? '#FF482C' : '#3ABF78', height: 16, width: 16, borderRadius: 8, marginRight: 8 }}></div>
-        <div>{room.busy ? 'Busy' : 'Available for ' + room.availableFor}</div>
-      </CardText>
-    )
+      <Card key={room.number} className={'room-card'}
+            style={room.master ? { background: (room.availability.busy) ? '#FF482C' : '#3ABF78' } : {padding: '0'}}
+      >
+        <CardText>
+          <div className={'room ' + (room.master ? 'room-master' : '') + (!room.availability.busy && room.master ? ' room-master-available' : '')}>
+            <h2 className="title">{room.name} ({room.number})</h2>
+            <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
+            <p className="availability">{room.availability.busy ? 'busy till ' + room.availability.availableFrom : 'available ' + room.availability.availableFor}</p>
+          </div>
+        </CardText>
+      </Card>
+    );
   }
 }
 
-export default Room;
+Room.propTypes = {
+  data: PropTypes.shape({
+    floorMasterRoom: PropTypes.object,
+    roomsOnMasterFloor: PropTypes.arrayOf(PropTypes.object),
+    loading: PropTypes.bool.isRequired,
+  }).isRequired,
+  params: PropTypes.shape({
+    roomNumber: PropTypes.string.isRequired
+  }).isRequired,
+};
+
+const AvailableRoomsQuery = gql`
+  query AvailableRoomsQuery($roomNumber: Int!){
+    floorMasterRoom: room(roomNumber: $roomNumber) {
+      ...roomWithAvailability
+    }
+    roomsOnMasterFloor: rooms(floorMasterRoomNumber: $roomNumber) {
+      ...roomWithAvailability
+    }
+  }
+  
+  fragment roomWithAvailability on Room {
+    name
+    number
+    capacity
+    availability {
+      busy
+      availableFor
+      availableFrom
+    }
+  }
+`;
+
+export default graphql(AvailableRoomsQuery, {
+  options: ({params}) => ({variables: {roomNumber: params.roomNumber}}),
+})(Room);
