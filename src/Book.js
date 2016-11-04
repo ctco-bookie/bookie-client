@@ -132,8 +132,8 @@ const RoomQuery = gql`
 `;
 
 const BookMutation = gql`
-  mutation BookMutation($roomNumber: Int!){
-    bookRoom(roomNumber: $roomNumber) {
+  mutation BookMutation($roomNumber: Int!, $bookForMinutes: Int!){
+    bookRoom(roomNumber: $roomNumber, bookForMinutes: $bookForMinutes) {
       success
       message
     }
@@ -153,6 +153,6 @@ const withMutations = graphql(BookMutation, {
       }
     })
   })
-});
+})
 
 export default withMutations(withQueries(Book));
