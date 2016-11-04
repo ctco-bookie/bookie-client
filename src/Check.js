@@ -16,9 +16,8 @@ class Check extends Component {
         <div>
           {this.renderRoomCard(masterRoom)}
         </div>
-        <div
-          style={{marginTop: '40px'}}
-        >
+        <div>
+          <p className="list-title">Available rooms on this floor</p>
           {rooms.map(room => this.renderRoomCard(room))}
         </div>
       </div>
@@ -33,13 +32,16 @@ class Check extends Component {
         <CardText>
           <div className={'room ' + (room.master ? 'room-master' : '') + (!room.availability.busy && room.master ? ' room-master-available' : '')}>
             <h2 className="title">{room.name} ({room.number})</h2>
-            <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
-            <p>{room.availability.busy ? 'Busy till ' + room.availability.availableFrom : 'Available for ' + room.availability.availableFor}</p>
-            <img
-              className="icon"
-              src={room.master ? capacityIconMaster : capacityIcon}
-              alt="capacityIcon"
-            />
+            <div  className="info" >
+              <div className="info-icon info-icon-capacity"></div>
+              <div>{room.capacity}</div>
+            </div>
+            <div className="info">
+              <div className="info-icon">
+                <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
+              </div>
+              <div>{room.availability.busy ? 'Busy till ' + room.availability.availableFrom : 'Available for ' + room.availability.availableFor}</div>
+            </div>
           </div>
         </CardText>
         {!room.availability.busy ? this.renderCardActions(room) : ''}
