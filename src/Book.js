@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import {Card, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import bookingOptions from './booking-options';
 
@@ -31,30 +32,33 @@ class Book extends Component {
 
   renderForm(room) {
     return (
-      <div>
-        <div>
-          Book {room.name} ({room.number}) for
-        </div>
-        <RadioButtonGroup
-          onChange={this.handleOptionChange}
-          name="bookingOptions"
-          defaultSelected={this.state.selectedOption}>
-          {bookingOptions.map(option => {
-            return (
-              <RadioButton
-                key={option.duration}
-                value={option}
-                label={option.label}
-              />
-            );
-          })}
-        </RadioButtonGroup>
-        <RaisedButton
-          label="Book Now"
-          primary={true}
-          fullWidth={true}
-          onClick={this.book}
-        />
+      <div style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}>
+        <Card style={{height: '100%'}}>
+          <CardTitle title={`Book + ${room.name} (${room.number}) for`}></CardTitle>
+          <CardText>
+            <RadioButtonGroup
+              onChange={this.handleOptionChange}
+              name="bookingOptions"
+              defaultSelected={this.state.selectedOption}>
+              {bookingOptions.map(option => {
+                return (
+                  <RadioButton
+                    key={option.duration}
+                    value={option}
+                    label={option.label}
+                    style={{marginBottom: '20px', fontSize: '16px'}}
+                  />
+                );
+              })}
+            </RadioButtonGroup>
+            <RaisedButton style={{marginTop: '20px'}}
+              label="Book Now"
+              primary={true}
+              fullWidth={true}
+              onClick={this.book}
+            />
+          </CardText>
+        </Card>
       </div>
     );
   }
