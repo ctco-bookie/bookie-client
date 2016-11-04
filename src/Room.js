@@ -16,14 +16,21 @@ class Room extends Component {
       </div>
     }
 
-    const {data: {roomAvailabilityWithFloorOptions: rooms}} = this.props;
+    const {data: {floorMasterRoom}} = this.props;
+    const {data: {roomsOnMasterFloor}} = this.props;
 
-    document.title = rooms.filter(room => room.master)[0].name;
+    const availableRooms = roomsOnMasterFloor.filter(room => !room.busy)
+                                             .sort((a, b) => a.number - b.number);
+
+    floorMasterRoom.master = true;
+
+    document.title = floorMasterRoom.name;
 
     return (
       <div>
         {this.props.children && React.cloneElement(this.props.children, {
-          rooms: rooms
+          rooms: availableRooms,
+          floorMasterRoom
         })}
       </div>
     );
@@ -32,7 +39,8 @@ class Room extends Component {
 
 Room.propTypes = {
   data: PropTypes.shape({
-    roomAvailabilityWithFloorOptions: PropTypes.arrayOf(PropTypes.object),
+    floorMasterRoom: PropTypes.object,
+    roomsOnMasterFloor: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired,
   }).isRequired,
   params: PropTypes.shape({
@@ -41,18 +49,27 @@ Room.propTypes = {
 };
 
 const AvailableRoomsQuery = gql`
-  query AvailableRoomsQuery($roomId: Int!){
-    roomAvailabilityWithFloorOptions(roomId: $roomId) {
-      name
-      number
+  query AvailableRoomsQuery($roomNumber: Int!){
+    floorMasterRoom: room(roomNumber: $roomNumber) {
+      ...roomWithAvailability
+    }
+    roomsOnMasterFloor: rooms(floorMasterRoomNumber: $roomNumber) {
+      ...roomWithAvailability
+    }
+  }
+  
+  fragment roomWithAvailability on Room {
+    name
+    number
+    capacity
+    availability {
       busy
       availableFor
       availableFrom
-      master
+    }
   }
-}
 `;
 
 export default graphql(AvailableRoomsQuery, {
-  options: ({params}) => ({variables: {roomId: params.roomNumber}}),
+  options: ({params}) => ({variables: {roomNumber: params.roomNumber}}),
 })(Room);
