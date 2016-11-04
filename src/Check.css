@@ -19,17 +19,31 @@
   font-weight: normal;
 }
 
+.room .info {
+  line-height: 18px;
+  margin-top: 2px;
+}
+
+.room .info-icon {
+  float: left;
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+}
+
+.room .info-icon-capacity {
+  background: url('./svg/capacity.svg');
+}
+
 .room .availability {
   opacity: 0.54;
 }
 
 .room .indicator {
-  margin-top: 3px;
-  float: left;
+  margin: 3px;
   height: 12px;
   width: 12px;
   border-radius: 6px;
-  margin-right: 6px;
 }
 
 .list-title {
