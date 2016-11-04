@@ -1,30 +1,30 @@
 import React, {Component, PropTypes} from 'react';
-import {Card, CardText} from 'material-ui/Card';
-import {List, ListItem} from 'material-ui/List';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import CircularProgress from 'material-ui/CircularProgress';
 
-import './Room.css';
-
 class Room extends Component {
   render() {
     if (this.props.data.loading) {
-      return <div style={{
-        textAlign: 'center',
-        fontSize: '20px',
-        marginTop: '30px'
-      }}>
-        <CircularProgress size={80} thickness={5} />
-        <p>Checking room availability</p>
-      </div>
+      return (
+        <div className="progress-bar">
+          <CircularProgress size={80} thickness={5}/>
+          <p>Checking room availability</p>
+        </div>
+      );
+    } else if (!this.props.data.floorMasterRoom) {
+      return (
+        <div className="progress-bar">
+          <p>{`Room ${this.props.params.roomNumber} not found`}</p>
+        </div>
+      );
     }
 
     const {data: {floorMasterRoom}} = this.props;
     const {data: {roomsOnMasterFloor}} = this.props;
 
-    const availableRooms = roomsOnMasterFloor.filter(room => !room.busy)
-                                           .sort((a, b) => a.number - b.number);
+    const availableRooms = roomsOnMasterFloor.filter(room => !room.availability.busy)
+                                             .sort((a, b) => a.number - b.number);
 
     floorMasterRoom.master = true;
 
@@ -32,36 +32,11 @@ class Room extends Component {
 
     return (
       <div>
-        <div style={{padding: '4px 16px 0 16px'}}>
-          {this.renderRoomCard(floorMasterRoom)}
-        </div>
-
-        <List>
-          <p className="list-title">Available rooms on this floor</p>
-
-          {availableRooms.map(room =>
-            <ListItem key={room.number}>
-              {this.renderRoomCard(room)}
-            </ListItem>
-          )}
-        </List>
+        {this.props.children && React.cloneElement(this.props.children, {
+          rooms: availableRooms,
+          masterRoom: floorMasterRoom
+        })}
       </div>
-    );
-  }
-
-  renderRoomCard(room) {
-    return (
-      <Card key={room.number} className={'room-card'}
-            style={room.master ? { background: (room.availability.busy) ? '#FF482C' : '#3ABF78' } : {}}
-      >
-        <CardText>
-          <div className={'room ' + (room.master ? 'room-master' : '') + (!room.availability.busy && room.master ? ' room-master-available' : '')}>
-            <h2 className="title">{room.name} ({room.number})</h2>
-            <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
-            <p className="availability">{room.availability.busy ? 'busy till ' + room.availability.availableFrom : 'available ' + room.availability.availableFor}</p>
-          </div>
-        </CardText>
-      </Card>
     );
   }
 }
