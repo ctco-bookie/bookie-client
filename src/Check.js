@@ -80,7 +80,7 @@ class Check extends Component {
   }
 
   renderTimeStatus(room) {
-    return room.availability.busy ? 'Busy till ' + room.availability.availableFrom : 'available for ' + room.availability.availableFor;
+    return room.availability.busy ? 'busy till ' + room.availability.availableFrom : 'available ' + room.availability.availableFor;
   }
 
   book(roomId) {
