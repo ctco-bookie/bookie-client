@@ -6,16 +6,24 @@ import CircularProgress from 'material-ui/CircularProgress';
 class Room extends Component {
   render() {
     if (this.props.data.loading) {
-      return <div className="progress-bar">
-        <CircularProgress size={80} thickness={5} />
-        <p>Checking room availability</p>
-      </div>
+      return (
+        <div className="progress-bar">
+          <CircularProgress size={80} thickness={5}/>
+          <p>Checking room availability</p>
+        </div>
+      );
+    } else if (!this.props.data.floorMasterRoom) {
+      return (
+        <div className="progress-bar">
+          <p>{`Room ${this.props.params.roomNumber} not found`}</p>
+        </div>
+      );
     }
 
     const {data: {floorMasterRoom}} = this.props;
     const {data: {roomsOnMasterFloor}} = this.props;
 
-    const availableRooms = roomsOnMasterFloor.filter(room => !room.busy)
+    const availableRooms = roomsOnMasterFloor.filter(room => !room.availability.busy)
                                              .sort((a, b) => a.number - b.number);
 
     floorMasterRoom.master = true;

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Card, CardText, CardActions} from 'material-ui/Card';
-import {Link} from 'react-router';
+import capacityIcon from './svg/capacity.svg';
+import capacityIconMaster from './svg/capacityMaster.svg';
+import FlatButton from 'material-ui/FlatButton';
+import { browserHistory } from 'react-router'
 
 import './Check.css';
 
@@ -10,8 +13,11 @@ class Check extends Component {
 
     return (
       <div>
-        <div>{this.renderRoomCard(masterRoom)}</div>
-        <div style={{marginTop: '40px'}}>
+        <div>
+          {this.renderRoomCard(masterRoom)}
+        </div>
+        <div>
+          <p className="list-title">Available rooms on this floor</p>
           {rooms.map(room => this.renderRoomCard(room))}
         </div>
       </div>
@@ -38,11 +44,34 @@ class Check extends Component {
             </div>
           </div>
         </CardText>
-        <CardActions>
-          <Link to={`/room/${room.number}/book`}>book</Link>
-        </CardActions>
+        {!room.availability.busy ? this.renderCardActions(room) : ''}
       </Card>
     );
+  }
+
+  renderCardActions(room) {
+    let actionStyles;
+    let labelStyles = {
+      fontWeight: 'bold'
+    };
+    if (room.master) {
+      actionStyles = {
+        borderTop: '1px solid rgba(255,255,255,0.24)'
+      };
+      labelStyles.color = '#fff';
+    }
+    else {
+      actionStyles = {
+        borderTop: '1px solid rgba(0,0,0,0.12)'
+      };
+    }
+    return <CardActions style={actionStyles}>
+      <FlatButton label={'Book ' + room.name} onClick={() => this.book(room.number)} primary={true} labelStyle={labelStyles} />
+    </CardActions>
+  }
+
+  book(roomId) {
+    browserHistory.push(`/room/${roomId}/book`)
   }
 }
 
