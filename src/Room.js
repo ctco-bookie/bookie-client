@@ -9,11 +9,7 @@ import './Room.css';
 class Room extends Component {
   render() {
     if (this.props.data.loading) {
-      return <div style={{
-        textAlign: 'center',
-        fontSize: '20px',
-        marginTop: '30px'
-      }}>
+      return <div className="progress-bar">
         <CircularProgress size={80} thickness={5} />
         <p>Checking room availability</p>
       </div>
