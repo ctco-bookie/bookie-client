@@ -1,0 +1,37 @@
+.book-success {
+  text-align: center;
+  font-size: 24px;
+  line-height: 36px;
+  margin-top: 100px;
+  color: #4CAF50;
+  margin-left: 56px;
+  margin-right: 56px;
+}
+
+.book-success-icon {
+  width: 154px;
+  height: 154px;
+  background: url("./svg/book_success.svg");
+  border: 5px solid #4CAF50;
+  border-radius: 82px;
+  margin: auto;
+}
+
+.book-fail {
+  text-align: center;
+  font-size: 24px;
+  line-height: 36px;
+  margin-top: 100px;
+  color: #FF482C;
+  margin-left: 56px;
+  margin-right: 56px;
+}
+
+.book-fail-icon {
+  width: 154px;
+  height: 154px;
+  background: url("./svg/book_fail.svg");
+  border: 5px solid #FF482C;
+  border-radius: 82px;
+  margin: auto;
+}
