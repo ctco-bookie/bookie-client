@@ -44,7 +44,7 @@ class Book extends Component {
   renderForm(room) {
     return (
       <Card style={{height: '100%'}}>
-        <CardTitle title={`Book + ${room.name} (${room.number}) for`}></CardTitle>
+        <CardTitle title={`Book ${room.name} (${room.number}) for`}></CardTitle>
         <CardText>
           <RadioButtonGroup
             onChange={this.handleOptionChange}
