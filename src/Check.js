@@ -16,9 +16,8 @@ class Check extends Component {
         <div>
           {this.renderRoomCard(masterRoom)}
         </div>
-        <div
-          style={{marginTop: '40px'}}
-        >
+        <div>
+          <p className="list-title">Available rooms on this floor</p>
           {rooms.map(room => this.renderRoomCard(room))}
         </div>
       </div>
