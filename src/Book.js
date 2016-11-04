@@ -5,6 +5,8 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {Card, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import bookingOptions from './booking-options';
+import { browserHistory } from 'react-router'
+import './Book.css';
 
 class Book extends Component {
   constructor() {
@@ -15,6 +17,7 @@ class Book extends Component {
     };
 
     this.book = this.book.bind(this);
+    this.back = this.back.bind(this);
     this.handleOptionChange = this.handleOptionChange.bind(this);
   }
 
@@ -26,7 +29,7 @@ class Book extends Component {
     } else if (this.state.result.success) {
       return this.renderSuccess();
     } else {
-      return this.renderFail();
+      return this.renderFail(room);
     }
   }
 
@@ -65,14 +68,31 @@ class Book extends Component {
 
   renderSuccess() {
     return (
-      <div>Success: {this.state.result.message}</div>
+      <div className="book-success">
+        <div className="book-success-icon"></div>
+        <p>{this.state.result.message}</p>
+      </div>
     );
   }
 
-  renderFail() {
+  renderFail(room) {
     return (
-      <div>Fail: {this.state.result.message}</div>
+      <div className="book-fail">
+        <div className="book-fail-icon"></div>
+        <p>{this.state.result.message}</p>
+        <RaisedButton
+          label="Back to Room List"
+          primary={true}
+          fullWidth={true}
+          onClick={() => this.back(room)}
+        />
+
+      </div>
     );
+  }
+
+  back(room) {
+    browserHistory.push(`/room/${room.number}/check`);
   }
 
   async book() {
