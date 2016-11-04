@@ -2,14 +2,20 @@ import React, {Component, PropTypes} from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import CircularProgress from 'material-ui/CircularProgress';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import bookingOptions from './booking-options';
 
 class Book extends Component {
   constructor() {
     super();
     this.state = {
-      result: null
+      result: null,
+      selectedOption: bookingOptions[0]
     };
+
     this.book = this.book.bind(this);
+    this.handleOptionChange = this.handleOptionChange.bind(this);
   }
 
   render() {
@@ -38,8 +44,29 @@ class Book extends Component {
   renderForm(room) {
     return (
       <div>
-        {room.name} ({room.number})
-        <button onClick={this.book}>Book now</button>
+        <div>
+          Book {room.name} ({room.number}) for
+        </div>
+        <RadioButtonGroup
+          onChange={this.handleOptionChange}
+          name="bookingOptions"
+          defaultSelected={this.state.selectedOption}>
+          {bookingOptions.map(option => {
+            return (
+              <RadioButton
+                key={option.duration}
+                value={option}
+                label={option.label}
+              />
+            );
+          })}
+        </RadioButtonGroup>
+        <RaisedButton
+          label="Book Now"
+          primary={true}
+          fullWidth={true}
+          onClick={this.book}
+        />
       </div>
     );
   }
@@ -57,9 +84,12 @@ class Book extends Component {
   }
 
   async book() {
-    const {data: {bookRoom}} = await this.props.bookRoom(this.props);
-    //TODO investigate possibility to move to props
+    const {data: {bookRoom}} = await this.props.bookRoom(this.props, this.state.selectedOption);
     this.setState({result: bookRoom});
+  }
+
+  handleOptionChange(_, selectedOption) {
+    this.setState({selectedOption});
   }
 }
 
@@ -98,7 +128,12 @@ const withQueries = graphql(RoomQuery, {
 
 const withMutations = graphql(BookMutation, {
   props: ({mutate}) => ({
-    bookRoom: ({params}) => mutate({variables: {roomNumber: params.roomNumber}})
+    bookRoom: ({params}, selectedOption) => mutate({
+      variables: {
+        roomNumber: params.roomNumber,
+        bookForMinutes: selectedOption.duration
+      }
+    })
   })
 });
 
