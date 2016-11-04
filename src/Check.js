@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {Card, CardText, CardActions} from 'material-ui/Card';
+import {Link} from 'react-router';
+import capacityIcon from './svg/capacity.svg';
+import capacityIconMaster from './svg/capacityMaster.svg';
 import FlatButton from 'material-ui/FlatButton';
 import { browserHistory } from 'react-router'
 
@@ -33,6 +36,11 @@ class Check extends Component {
             <h2 className="title">{room.name} ({room.number})</h2>
             <div className={'indicator ' + (room.availability.busy ? 'busy' : 'available')}></div>
             <p>{room.availability.busy ? 'Busy till ' + room.availability.availableFrom : 'Available for ' + room.availability.availableFor}</p>
+            <img
+              className="icon"
+              src={room.master ? capacityIconMaster : capacityIcon}
+              alt="capacityIcon"
+            />
           </div>
         </CardText>
         {!room.availability.busy ? this.renderCardActions(room) : ''}
