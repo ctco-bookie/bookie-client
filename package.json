@@ -4,8 +4,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "env-cmd": "2.2.0",
-    "react-scripts": "0.4.3"
+    "react-scripts": "0.7.0"
   },
   "dependencies": {
     "apollo-client": "0.5.0",
@@ -18,7 +17,7 @@
     "react-tap-event-plugin": "1.0.0"
   },
   "scripts": {
-    "start": "env-cmd .env react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
