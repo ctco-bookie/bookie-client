@@ -1,23 +1,23 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {Card, CardText, CardActions} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import './Check.css';
 
 class Check extends Component {
   render() {
-    const {rooms, masterRoom} = this.props;
+    const {data: {roomsOnFloor}, masterRoom} = this.props;
 
     return (
       <div>
         <div>
           {this.renderRoomCard(masterRoom)}
         </div>
-        <div>
-          <p className="list-title">Available rooms on this floor</p>
-          {rooms.map(room => this.renderRoomCard(room))}
-        </div>
+        {this.renderAvailableRooms(roomsOnFloor)}
       </div>
     );
   }
@@ -35,6 +35,27 @@ class Check extends Component {
         </CardText>
         {!room.availability.busy ? this.renderCardActions(room) : ''}
       </Card>
+    );
+  }
+
+  renderAvailableRooms(rooms) {
+    let availableRooms = (rooms || []).filter(room => !room.availability.busy)
+      .sort((a, b) => a.number - b.number);
+
+    return (
+      <div>
+        {(availableRooms.length) ?
+          <div>
+            <p className="list-title">Available rooms on this floor</p>
+            {availableRooms.map(room => this.renderRoomCard(room))}
+          </div>
+          :
+          <div className="progress-bar">
+            <CircularProgress size={50} thickness={4}/>
+            <p>Finding available rooms</p>
+          </div>
+        }
+      </div>
     );
   }
 
@@ -88,4 +109,31 @@ class Check extends Component {
   }
 }
 
-export default Check;
+Check.propTypes = {
+  data: PropTypes.shape({
+    roomsOnFloor: PropTypes.arrayOf(PropTypes.object),
+    loading: PropTypes.bool.isRequired,
+  }).isRequired,
+  params: PropTypes.shape({
+    roomNumber: PropTypes.string.isRequired
+  }).isRequired,
+};
+
+const FloorRoomsQuery = gql`
+  query AvailableRoomsQuery($roomNumber: Int!){
+    roomsOnFloor: rooms(floorMasterRoomNumber: $roomNumber) {
+      name
+      number
+      capacity
+      availability {
+        busy
+        availableFor
+        availableFrom
+      }
+    }
+  }
+`;
+
+export default graphql(FloorRoomsQuery, {
+  options: ({params}) => ({variables: {roomNumber: params.roomNumber}}),
+})(Check);
