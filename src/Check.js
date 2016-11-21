@@ -58,8 +58,8 @@ class Check extends Component {
   }
 
   renderAvailableRooms(rooms) {
-    let availableRooms = (rooms || []).filter(room => !room.availability.busy)
-      .sort((a, b) => a.number - b.number);
+    let availableRooms = (rooms || []).filter(room => room.availability && !room.availability.busy)
+                                      .sort((a, b) => a.number - b.number);
 
     return (
       <div>
