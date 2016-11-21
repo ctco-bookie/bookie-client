@@ -7,13 +7,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import bookingOptions from './booking-options';
 import { browserHistory } from 'react-router'
 import './Book.css';
+import CircularProgress from 'material-ui/CircularProgress';
+
 
 class Book extends Component {
   constructor() {
     super();
     this.state = {
       result: null,
-      selectedOption: bookingOptions[0]
+      selectedOption: bookingOptions[0],
+      bookInProgress: false
     };
 
     this.book = this.book.bind(this);
@@ -22,6 +25,15 @@ class Book extends Component {
   }
 
   render() {
+    if (this.state.bookInProgress) {
+      return (
+        <div className="progress-bar">
+          <CircularProgress size={80} thickness={5}/>
+          <p>Booking room now</p>
+        </div>
+      );
+    }
+
     const {data: {room}} = this.props;
 
     return (
@@ -35,7 +47,7 @@ class Book extends Component {
     if (!this.state.result) {
       return this.renderForm(room);
     } else if (this.state.result.success) {
-      return this.renderSuccess();
+      return this.renderSuccess(room);
     } else {
       return this.renderFail(room);
     }
@@ -67,16 +79,18 @@ class Book extends Component {
             fullWidth={true}
             onClick={this.book}
           />
+          {this.renderBackButton(room)}
         </CardText>
       </Card>
     );
   }
 
-  renderSuccess() {
+  renderSuccess(room) {
     return (
       <div className="book-success">
         <div className="book-success-icon"></div>
         <p>{this.state.result.message}</p>
+        {this.renderBackButton(room)}
       </div>
     );
   }
@@ -86,24 +100,28 @@ class Book extends Component {
       <div className="book-fail">
         <div className="book-fail-icon"></div>
         <p>{this.state.result.message}</p>
-        <RaisedButton
-          label="Back to Room List"
-          primary={true}
-          fullWidth={true}
-          onClick={() => this.back(room)}
-        />
-
+        {this.renderBackButton(room)}
       </div>
     );
   }
 
+  renderBackButton(room) {
+    return <RaisedButton style={{marginTop: '20px'}}
+                         label="Back to Room List"
+                         fullWidth={true}
+                         onClick={() => this.back(room)}
+    />
+  }
+
   back(room) {
     browserHistory.push(`/room/${room.number}/check`);
+    window.location.reload(true);
   }
 
   async book() {
+    this.setState({bookInProgress: true});
     const {data: {bookRoom}} = await this.props.bookRoom(this.props, this.state.selectedOption);
-    this.setState({result: bookRoom});
+    this.setState({result: bookRoom, bookInProgress: false});
   }
 
   handleOptionChange(_, selectedOption) {

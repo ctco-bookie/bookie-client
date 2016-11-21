@@ -21,10 +21,6 @@ class Room extends Component {
     }
 
     const {data: {floorMasterRoom}} = this.props;
-    const {data: {roomsOnMasterFloor}} = this.props;
-
-    const availableRooms = roomsOnMasterFloor.filter(room => !room.availability.busy)
-                                             .sort((a, b) => a.number - b.number);
 
     floorMasterRoom.master = true;
 
@@ -33,7 +29,6 @@ class Room extends Component {
     return (
       <div>
         {this.props.children && React.cloneElement(this.props.children, {
-          rooms: availableRooms,
           masterRoom: floorMasterRoom
         })}
       </div>
@@ -55,9 +50,6 @@ Room.propTypes = {
 const AvailableRoomsQuery = gql`
   query AvailableRoomsQuery($roomNumber: Int!){
     floorMasterRoom: room(roomNumber: $roomNumber) {
-      ...roomWithAvailability
-    }
-    roomsOnMasterFloor: rooms(floorMasterRoomNumber: $roomNumber) {
       ...roomWithAvailability
     }
   }
