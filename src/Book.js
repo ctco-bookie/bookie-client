@@ -115,6 +115,7 @@ class Book extends Component {
 
   back(room) {
     browserHistory.push(`/room/${room.number}/check`);
+    window.location.reload(true);
   }
 
   async book() {
