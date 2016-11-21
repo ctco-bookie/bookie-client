@@ -65,9 +65,9 @@ class Book extends Component {
     if (!this.state.result) {
       return this.renderForm(room);
     } else if (this.state.result.success) {
-      return this.renderSuccess(room);
+      return this.renderSuccess();
     } else {
-      return this.renderFail(room);
+      return this.renderFail();
     }
   }
 
@@ -97,42 +97,44 @@ class Book extends Component {
             fullWidth={true}
             onClick={this.book}
           />
-          {this.renderBackButton(room)}
+          {this.renderBackButton()}
         </CardText>
       </Card>
     );
   }
 
-  renderSuccess(room) {
+  renderSuccess() {
     return (
       <div className="book-success">
         <div className="book-success-icon"></div>
         <p>{this.state.result.message}</p>
-        {this.renderBackButton(room)}
+        {this.renderBackButton()}
       </div>
     );
   }
 
-  renderFail(room) {
+  renderFail() {
     return (
       <div className="book-fail">
         <div className="book-fail-icon"></div>
         <p>{this.state.result.message}</p>
-        {this.renderBackButton(room)}
+        {this.renderBackButton()}
       </div>
     );
   }
 
-  renderBackButton(room) {
-    return <RaisedButton style={{marginTop: '20px'}}
-                         label="Back to Room List"
-                         fullWidth={true}
-                         onClick={() => this.back(room)}
-    />
+  renderBackButton() {
+    return (
+      <RaisedButton style={{marginTop: '20px'}}
+                    label="Back to Room List"
+                    fullWidth={true}
+                    onClick={this.back}
+      />
+    );
   }
 
-  back(room) {
-    browserHistory.push(`/room/${room.number}/check`);
+  back() {
+    browserHistory.push(`/room/${this.props.params.roomNumber}/check`);
     window.location.reload(true);
   }
 
@@ -189,6 +191,6 @@ const withMutations = graphql(BookMutation, {
       }
     })
   })
-})
+});
 
 export default withMutations(withQueries(Book));
