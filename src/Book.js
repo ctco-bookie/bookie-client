@@ -67,6 +67,11 @@ class Book extends Component {
             fullWidth={true}
             onClick={this.book}
           />
+          <RaisedButton style={{marginTop: '20px'}}
+            label="Back to Room List"
+            fullWidth={true}
+            onClick={() => this.back(room)}
+          />
         </CardText>
       </Card>
     );
