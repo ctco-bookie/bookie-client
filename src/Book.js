@@ -7,13 +7,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import bookingOptions from './booking-options';
 import { browserHistory } from 'react-router'
 import './Book.css';
+import CircularProgress from 'material-ui/CircularProgress';
+
 
 class Book extends Component {
   constructor() {
     super();
     this.state = {
       result: null,
-      selectedOption: bookingOptions[0]
+      selectedOption: bookingOptions[0],
+      bookInProgress: false
     };
 
     this.book = this.book.bind(this);
@@ -22,6 +25,15 @@ class Book extends Component {
   }
 
   render() {
+    if (this.state.bookInProgress) {
+      return (
+        <div className="progress-bar">
+          <CircularProgress size={80} thickness={5}/>
+          <p>Booking room now</p>
+        </div>
+      );
+    }
+
     const {data: {room}} = this.props;
 
     return (
@@ -102,8 +114,9 @@ class Book extends Component {
   }
 
   async book() {
+    this.setState({bookInProgress: true});
     const {data: {bookRoom}} = await this.props.bookRoom(this.props, this.state.selectedOption);
-    this.setState({result: bookRoom});
+    this.setState({result: bookRoom, bookInProgress: false});
   }
 
   handleOptionChange(_, selectedOption) {
