@@ -10,7 +10,26 @@ import './Check.css';
 
 class Check extends Component {
   render() {
-    const {data: {roomsOnFloor}, masterRoom} = this.props;
+    const {data: {roomsOnFloor, masterRoom}} = this.props;
+
+    if (this.props.data.loading) {
+      return (
+        <div className="progress-bar">
+          <CircularProgress size={80} thickness={5}/>
+          <p>Checking room availability</p>
+        </div>
+      );
+    } else if (!masterRoom) {
+      return (
+        <div className="progress-bar">
+          <p>{`Room ${this.props.params.roomNumber} not found`}</p>
+        </div>
+      );
+    }
+
+    masterRoom.master = true;
+
+    document.title = masterRoom.name;
 
     return (
       <div>
@@ -111,6 +130,7 @@ class Check extends Component {
 
 Check.propTypes = {
   data: PropTypes.shape({
+    masterRoom: PropTypes.object,
     roomsOnFloor: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired,
   }).isRequired,
@@ -119,21 +139,28 @@ Check.propTypes = {
   }).isRequired,
 };
 
-const FloorRoomsQuery = gql`
+const AvailableRoomsQuery = gql`
   query AvailableRoomsQuery($roomNumber: Int!){
+    masterRoom: room(roomNumber: $roomNumber) {
+      ...roomWithAvailability
+    }
     roomsOnFloor: rooms(floorMasterRoomNumber: $roomNumber) {
-      name
-      number
-      capacity
-      availability {
-        busy
-        availableFor
-        availableFrom
-      }
+      ...roomWithAvailability
+    }
+  }
+  
+  fragment roomWithAvailability on Room {
+    name
+    number
+    capacity
+    availability {
+      busy
+      availableFor
+      availableFrom
     }
   }
 `;
 
-export default graphql(FloorRoomsQuery, {
+export default graphql(AvailableRoomsQuery, {
   options: ({params}) => ({variables: {roomNumber: params.roomNumber}}),
 })(Check);
