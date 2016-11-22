@@ -36,24 +36,6 @@ class Book extends Component {
 
     const {data: {room}} = this.props;
 
-    if (this.props.data.loading) {
-      // @todo:
-      return (
-        <div className="progress-bar">
-          <CircularProgress size={80} thickness={5}/>
-          <p>Checking room availability</p>
-        </div>
-      );
-    } else if (!room) {
-      return (
-        <div className="progress-bar">
-          <p>{`Room ${this.props.params.roomNumber} not found`}</p>
-        </div>
-      );
-    }
-
-    document.title = room.name;
-
     return (
       <div style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, background: '#fff'}}>
         {this.renderContents(room)}
@@ -151,7 +133,7 @@ class Book extends Component {
 
 Book.propTypes = {
   data: PropTypes.shape({
-    room: PropTypes.object,
+    roomAvailability: PropTypes.object,
     loading: PropTypes.bool.isRequired,
   }).isRequired,
   params: PropTypes.shape({
