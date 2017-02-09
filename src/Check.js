@@ -4,14 +4,19 @@ import FlatButton from 'material-ui/FlatButton';
 import { browserHistory } from 'react-router';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
+import {trackEvent, trackPageView} from './analytics';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import './Check.css';
 
 class Check extends Component {
+  componentDidMount(){
+    const room = this.props.masterRoom;
+    trackPageView("Scan QR/" + room.floor +' floor/'+ room.name + ' (' + room.number + ')');
+  }
+
   render() {
     const {data: {roomsOnFloor}, masterRoom} = this.props;
-
     return (
       <div>
         <div>
@@ -76,7 +81,7 @@ class Check extends Component {
       };
     }
     return <CardActions style={actionStyles}>
-      <FlatButton label={'Book ' + room.name} onClick={() => this.book(room.number)} primary={true} labelStyle={labelStyles} />
+      <FlatButton label={'Book ' + room.name} onClick={() => this.book(room)} primary={true} labelStyle={labelStyles} />
     </CardActions>
   }
 
@@ -104,8 +109,9 @@ class Check extends Component {
     return room.availability.busy ? 'busy till ' + room.availability.availableFrom : 'available ' + room.availability.availableFor;
   }
 
-  book(roomId) {
-    browserHistory.push(`/room/${roomId}/book`)
+  book(room) {
+    trackEvent('Proceed to Booking', room.name + ' (' + room.number + ')');
+    browserHistory.push(`/room/${room.number}/book`)
   }
 }
 
@@ -125,6 +131,7 @@ const FloorRoomsQuery = gql`
       name
       number
       capacity
+      floor
       availability {
         busy
         availableFor

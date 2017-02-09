@@ -8,7 +8,7 @@ import bookingOptions from './booking-options';
 import { browserHistory } from 'react-router'
 import './Book.css';
 import CircularProgress from 'material-ui/CircularProgress';
-
+import {trackEvent, trackPageView} from './analytics';
 
 class Book extends Component {
   constructor() {
@@ -86,6 +86,7 @@ class Book extends Component {
   }
 
   renderSuccess(room) {
+    trackPageView("Booking Result/Success");
     return (
       <div className="book-success">
         <div className="book-success-icon"></div>
@@ -96,6 +97,7 @@ class Book extends Component {
   }
 
   renderFail(room) {
+    trackPageView("Booking Result/Busy");
     return (
       <div className="book-fail">
         <div className="book-fail-icon"></div>
@@ -119,6 +121,7 @@ class Book extends Component {
   }
 
   async book() {
+    trackEvent('Book Room', this.state.selectedOption.label);
     this.setState({bookInProgress: true});
     const {data: {bookRoom}} = await this.props.bookRoom(this.props, this.state.selectedOption);
     this.setState({result: bookRoom, bookInProgress: false});

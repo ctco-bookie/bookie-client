@@ -58,6 +58,7 @@ const AvailableRoomsQuery = gql`
     name
     number
     capacity
+    floor
     availability {
       busy
       availableFor
