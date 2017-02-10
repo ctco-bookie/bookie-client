@@ -12,7 +12,7 @@ import './Check.css';
 class Check extends Component {
   componentDidMount(){
     const room = this.props.masterRoom;
-    trackPageView("Scan QR/" + room.floor +' floor/'+ room.name + ' (' + room.number + ')');
+    trackPageView(`Scan QR/${room.floor} floor/${room.name} (${room.number})`);
   }
 
   render() {
@@ -110,7 +110,7 @@ class Check extends Component {
   }
 
   book(room) {
-    trackEvent('Proceed to Booking', room.name + ' (' + room.number + ')');
+    trackEvent('Proceed to Booking', `${room.name} (${room.number})`);
     browserHistory.push(`/room/${room.number}/book`)
   }
 }
