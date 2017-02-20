@@ -99,7 +99,7 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd !NPM_CMD! run build
   IF !ERRORLEVEL! NEQ 0 goto error
 
-  cp web.config build/
+  cp azure/web.config build/
 
   popd
 
