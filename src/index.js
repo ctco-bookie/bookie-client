@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, browserHistory} from 'react-router';
+import {Router, Route, hashHistory, IndexRedirect} from 'react-router';
 import App from './App';
 import Room from './Room';
 import Book from './Book';
@@ -15,8 +15,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Router history={browserHistory}>
+    <Router history={hashHistory}>
       <Route path="/" component={App}>
+        <IndexRedirect to="room/412/check" />
         <Route path="room/:roomNumber/" component={Room}>
           <Route path="check" component={Check} />
           <Route path="book" component={Book} />

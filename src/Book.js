@@ -5,7 +5,7 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {Card, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import bookingOptions from './booking-options';
-import { browserHistory } from 'react-router'
+import { hashHistory } from 'react-router'
 import './Book.css';
 import CircularProgress from 'material-ui/CircularProgress';
 import {trackEvent, trackPageView} from './analytics';
@@ -116,7 +116,7 @@ class Book extends Component {
   }
 
   back(room) {
-    browserHistory.push(`/room/${room.number}/check`);
+    hashHistory.push(`/room/${room.number}/check`);
     window.location.reload(true);
   }
 
