@@ -6,6 +6,9 @@
   "devDependencies": {
     "react-scripts": "0.7.0"
   },
+  "engines": {
+    "node": "7.4.0"
+  },
   "dependencies": {
     "apollo-client": "0.5.5",
     "graphql-tag": "0.1.16",
