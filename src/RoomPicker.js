@@ -31,7 +31,7 @@ class RoomPicker extends Component {
   }
 
   book = (event, room) => {
-    history.push(`/room/${this.state.room}/book`)
+    history.push(`/room/${this.state.room}/check`)
   }
 }
 
