@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, browserHistory} from 'react-router';
+import {Router, Route} from 'react-router';
+import history from './history';
 import App from './App';
 import Room from './Room';
 import Book from './Book';
@@ -15,7 +16,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Router history={browserHistory}>
+    <Router history={history}>
       <Route path="/" component={App}>
         <Route path="room/:roomNumber/" component={Room}>
           <Route path="check" component={Check} />

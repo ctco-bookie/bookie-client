@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Card, CardText, CardActions} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import { browserHistory } from 'react-router';
+import history from './history';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import {trackEvent, trackPageView} from './analytics';
@@ -111,7 +111,7 @@ class Check extends Component {
 
   book(room) {
     trackEvent('Proceed to Booking', `${room.name} (${room.number})`);
-    browserHistory.push(`/room/${room.number}/book`)
+    history.push(`/room/${room.number}/book`)
   }
 }
 
