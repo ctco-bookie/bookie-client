@@ -102,7 +102,7 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd !NPM_CMD! run build
   IF !ERRORLEVEL! NEQ 0 goto error
 
-  copy %WEB_CONFIG% %BUILD_DIR%
+  cp %WEB_CONFIG% %BUILD_DIR%
 
   popd
 
