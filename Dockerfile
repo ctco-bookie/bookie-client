@@ -10,7 +10,7 @@ RUN npm install
 
 COPY . /usr/src/app
 
-#ENV REACT_APP_BOOKIE_SERVER_URL /api
+ENV REACT_APP_BOOKIE_SERVER_URL /api
 
 RUN npm run build
 
